@@ -164,3 +164,21 @@ test('descriptors can access current tree by default', function(assert) {
     'The answer to life, the universe and everything is 42'
   );
 });
+
+test('descriptors can mutate tree on build', function(assert) {
+  var tree = Ceibo.create({
+    foo: {
+      isDescriptor: true,
+
+      get() {
+        return 'bar';
+      },
+
+      setup(target, keyName) {
+        Ceibo.defineProperty(target, keyName.toUpperCase(), 'generated property');
+      }
+    }
+  });
+
+  assert.equal(tree.FOO, 'generated property');
+});

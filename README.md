@@ -58,6 +58,28 @@ var root = Ceibo.create({
 console.log(root.foo('42')); // "The answer to life, the universe and everything is 42"
 ```
 
+_descriptors_ can inspect and mutate the target object by defining a `setup`
+method:
+
+```js
+var tree = Ceibo.create({
+  foo: {
+    isDescriptor: true,
+
+    get() {
+      return 'bar';
+    },
+
+    setup(target, keyName) {
+      Ceibo.defineProperty(target, keyName.toUpperCase(), 'generated property');
+    }
+  }
+});
+
+console.log(tree.foo); // "bar"
+console.log(tree.FOO); // "generated property"
+```
+
 Note that Ceibo trees are read-only, so you cannot reassign attributes:
 
 ```js
@@ -105,6 +127,7 @@ var root = Ceibo.create({
   }
 }, { object: buildObject });
 
+console.log(tree.generatedProperty); // "generated property"
 console.log(tree.foo.generatedProperty); // "generated property"
 console.log(tree.foo.bar); // "baz"
 ```

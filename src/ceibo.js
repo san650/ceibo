@@ -38,6 +38,10 @@ var Ceibo = {};
   }
 
   function buildDescriptor(treeBuilder, target, key, attr) {
+    if (typeof attr.setup === 'function') {
+      attr.setup(target, key);
+    }
+
     defineProperty(target, key, attr.value, attr.get);
   }
 
