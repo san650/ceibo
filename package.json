@@ -1,0 +1,26 @@
+{
+  "name": "ceibo",
+  "version": "1.0.0",
+  "description": "Tree data structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/san650/ceibo.git"
+  },
+  "keywords": [
+    "data-structure",
+    "tree"
+  ],
+  "author": "Santiago Ferreira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/san650/ceibo/issues"
+  },
+  "homepage": "https://github.com/san650/ceibo#readme",
+  "devDependencies": {
+    "qunitjs": "^1.20.0"
+  }
+}
