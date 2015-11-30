@@ -1,7 +1,7 @@
 # Ceibo
 
-Model a tree data structure that allows to lazily evaluate arbitrary code when a
-node is accessed.
+JavaScript micro library to model trees that evaluate arbitrary code when
+accessing its nodes.
 
 The tree is modeled as a plain JavaScript object where each node has an
 arbitrary getter function. This allows to have a representation of a tree where
@@ -99,11 +99,10 @@ function buildString(treeBuilder, target, keyName, value) {
 }
 
 var root = Ceibo.create({
-  foo: 'first value',
-  bar: 'second value'
+  foo: 'first value'
 }, { string: buildString });
 
-console.log('root.foo'); // "Cuack first value"
+console.log(root.foo); // "Cuack first value"
 ```
 
 Redefine how plain objects are processed to generate custom attributes:
