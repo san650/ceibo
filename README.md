@@ -98,9 +98,16 @@ function buildString(treeBuilder, target, keyName, value) {
   Ceibo.defineProperty(target, keyName, `Cuack ${value}`);
 }
 
-var root = Ceibo.create({
-  foo: 'first value'
-}, { string: buildString });
+var root = Ceibo.create(
+  {
+    foo: 'first value'
+  },
+  {
+    builder: {
+      string: buildString
+    }
+  }
+);
 
 console.log(root.foo); // "Cuack first value"
 ```
@@ -120,15 +127,31 @@ function buildObject(treeBuilder, target, keyName, value) {
   treeBuilder.processNode(value, childNode, target);
 }
 
-var root = Ceibo.create({
-  foo: {
-    bar: 'baz'
+var root = Ceibo.create(
+  {
+    foo: {
+      bar: 'baz'
+    }
+  },
+  {
+    builder: {
+      object: buildObject
+    }
   }
-}, { object: buildObject });
+);
 
 console.log(tree.generatedProperty); // "generated property"
 console.log(tree.foo.generatedProperty); // "generated property"
 console.log(tree.foo.bar); // "baz"
+```
+
+You can assign parents to trees
+
+```js
+var parentTree = Ceibo.create({ foo: 'value' });
+var childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
+
+console.log(childTree.__parent.foo); // "value"
 ```
 
 ## License

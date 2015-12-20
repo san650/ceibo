@@ -55,13 +55,16 @@ test('parent node is accessible', function(assert) {
 });
 
 test('overrides how strings are built', function(assert) {
-  var tree = Ceibo.create({
-    key: "value"
-  }, {
-    string: function(builder, target, key, value) {
-      target[key] = `cuack ${value}`;
+  var tree = Ceibo.create(
+    { key: "value" },
+    {
+      builder: {
+        string(treeBuilder, target, key, value) {
+          target[key] = `cuack ${value}`;
+        }
+      }
     }
-  });
+  );
 
   assert.equal(tree.key, 'cuack value');
 });
@@ -131,11 +134,16 @@ test('allows to insert custom keys to objects', function(assert) {
     treeBuilder.processNode(value, childNode, target);
   }
 
-  var tree = Ceibo.create({
-    key: {
-      anotherKey: 'value'
+  var tree = Ceibo.create(
+    {
+      key: { anotherKey: 'value' }
+    },
+    {
+      builder: {
+        object: buildObject
+      }
     }
-  }, { object: buildObject });
+  );
 
   assert.equal(tree.foo, 'generated property');
   assert.equal(tree.key.anotherKey, 'value');
@@ -181,4 +189,19 @@ test('descriptors can mutate tree on build', function(assert) {
   });
 
   assert.equal(tree.FOO, 'generated property');
+});
+
+test('.creates asigns parent tree', function(assert) {
+  var parentTree = Ceibo.create({ foo: { qux: 'another value' }, bar: 'a value' });
+  var tree1 = Ceibo.create({ baz: {} }, { parent: parentTree });
+  var tree2 = Ceibo.create({ baz: {} }, { parent: parentTree.foo });
+
+  assert.equal(tree1.baz.__parent.__parent.bar, 'a value');
+  assert.equal(tree2.__parent.qux, 'another value');
+});
+
+test(".creates doesn't assigns a parent tree to the root", function(assert) {
+  var tree = Ceibo.create({ foo: 'a value' });
+
+  assert.ok(!tree.__parent);
 });
