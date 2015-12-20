@@ -64,23 +64,33 @@ var Ceibo = {};
     this.builders = builders;
   }
 
+  function setParent(target, parent) {
+    if (parent) {
+      Object.defineProperty(target, '__parentTreeNode', { value: parent, configurable: true });
+    } else {
+      delete target['__parentTreeNode'];
+    }
+  }
+
+  function parent(object) {
+    if (typeof object === 'object') {
+      return object['__parentTreeNode'];
+    }
+  }
+
   TreeBuilder.prototype = {
     builderFor(value) {
       return this.builders[typeOf(value)] || this.builders['default'];
     },
 
     build(parentTree) {
-      var root = {};
+      var root = {},
+          node;
 
       this.processNode({ root: this.definition }, root);
 
-      var node = root['root'];
-      delete node.__parent;
-
-      if (parentTree) {
-        // Create parent reference
-        defineProperty(node, '__parent', parentTree);
-      }
+      node = root['root'];
+      setParent(node, parentTree);
 
       return node;
     },
@@ -96,10 +106,7 @@ var Ceibo = {};
         builder(this, target, key, attr);
       });
 
-      if (parent) {
-        // Create parent reference
-        defineProperty(target, '__parent', parent);
-      }
+      setParent(target, parent);
 
       return target;
     }
@@ -120,4 +127,8 @@ var Ceibo = {};
   };
 
   module.defineProperty = defineProperty;
+
+  module.parent = function(node) {
+    return parent(node);
+  }
 }(Ceibo);

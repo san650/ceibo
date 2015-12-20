@@ -145,13 +145,27 @@ console.log(tree.foo.generatedProperty); // "generated property"
 console.log(tree.foo.bar); // "baz"
 ```
 
-You can assign parents to trees
+You can navigate to parent nodes
+
+```js
+var tree = Ceibo.create({
+  foo: {
+    bar: {
+      baz: 'a value'
+    }
+  }
+});
+
+console.log(Ceibo.parent(tree.foo.bar).bar.baz); // "a value"
+```
+
+You can assign custom parents to trees
 
 ```js
 var parentTree = Ceibo.create({ foo: 'value' });
 var childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
 
-console.log(childTree.__parent.foo); // "value"
+console.log(Ceibo.parent(childTree).foo); // "value"
 ```
 
 ## License

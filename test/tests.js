@@ -51,7 +51,7 @@ test('parent node is accessible', function(assert) {
     }
   });
 
-  assert.equal(tree.key.__parent.key.anotherKey, 'value');
+  assert.equal(Ceibo.parent(tree.key).key.anotherKey, 'value');
 });
 
 test('overrides how strings are built', function(assert) {
@@ -196,12 +196,24 @@ test('.creates asigns parent tree', function(assert) {
   var tree1 = Ceibo.create({ baz: {} }, { parent: parentTree });
   var tree2 = Ceibo.create({ baz: {} }, { parent: parentTree.foo });
 
-  assert.equal(tree1.baz.__parent.__parent.bar, 'a value');
-  assert.equal(tree2.__parent.qux, 'another value');
+  assert.equal(Ceibo.parent(Ceibo.parent(tree1.baz)).bar, 'a value');
+  assert.equal(Ceibo.parent(tree2).qux, 'another value');
 });
 
 test(".creates doesn't assigns a parent tree to the root", function(assert) {
   var tree = Ceibo.create({ foo: 'a value' });
 
-  assert.ok(!tree.__parent);
+  assert.ok(!Ceibo.parent(tree));
+});
+
+test(".parent returns undefined when node doesn't have parent or doesn't exists", function(assert) {
+  var node = undefined;
+
+  assert.ok(!Ceibo.parent(node));
+});
+
+test(".parent doesn't generates enumerable attribute", function(assert) {
+  var tree = Ceibo.create({ foo: { bar: "a value" } });
+
+  assert.equal(Object.keys(tree.foo).length, 1);
 });
