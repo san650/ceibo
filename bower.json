@@ -1,0 +1,26 @@
+{
+  "name": "ceibo",
+  "description": "Ceibo is a JavaScript micro library to model trees that evaluate arbitrary code when accessing its nodes.",
+  "main": "index.js",
+  "authors": [
+    "Santiago Ferreira"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "data",
+    "structure",
+    "tree"
+  ],
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "homepage": "https://github.com/san650/ceibo#readme",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
