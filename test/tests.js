@@ -10,7 +10,7 @@ test('evaluates a descriptor', function(assert) {
   var tree = Ceibo.create({
     key: {
       isDescriptor: true,
-      get() {
+      get: function() {
         return 'value';
       }
     }
@@ -34,7 +34,7 @@ test('process descriptors recursively', function(assert) {
     key: {
       anotherKey: {
         isDescriptor: true,
-        get() {
+        get: function() {
           return 'value';
         }
       }
@@ -59,8 +59,8 @@ test('overrides how strings are built', function(assert) {
     { key: "value" },
     {
       builder: {
-        string(treeBuilder, target, key, value) {
-          target[key] = `cuack ${value}`;
+        string: function(treeBuilder, target, key, value) {
+          target[key] = 'cuack ' + value;
         }
       }
     }
@@ -77,7 +77,7 @@ test('support value in descriptors', function(assert) {
         var copy = {};
 
         for (var attr in definition) {
-          copy[attr] = `${index} ${definition[attr]}`;
+          copy[attr] = index + ' ' + definition[attr];
         }
 
         return copy;
@@ -107,7 +107,7 @@ test('allows dynamic segments to process descriptors', function(assert) {
 
   var descriptor = {
     isDescriptor: true,
-    get() {
+    get: function() {
       return 'value';
     }
   };
@@ -155,8 +155,8 @@ test('descriptors can access current tree by default', function(assert) {
     foo: {
       isDescriptor: true,
 
-      get() {
-        return `The answer to life, the universe and everything is ${this.bar}`;
+      get: function() {
+        return 'The answer to life, the universe and everything is ' + this.bar;
       }
     },
 
@@ -178,11 +178,11 @@ test('descriptors can mutate tree on build', function(assert) {
     foo: {
       isDescriptor: true,
 
-      get() {
+      get: function() {
         return 'bar';
       },
 
-      setup(target, keyName) {
+      setup: function(target, keyName) {
         Ceibo.defineProperty(target, keyName.toUpperCase(), 'generated property');
       }
     }
@@ -191,7 +191,7 @@ test('descriptors can mutate tree on build', function(assert) {
   assert.equal(tree.FOO, 'generated property');
 });
 
-test('.creates asigns parent tree', function(assert) {
+test('.create asigns parent tree', function(assert) {
   var parentTree = Ceibo.create({ foo: { qux: 'another value' }, bar: 'a value' });
   var tree1 = Ceibo.create({ baz: {} }, { parent: parentTree });
   var tree2 = Ceibo.create({ baz: {} }, { parent: parentTree.foo });
@@ -200,7 +200,7 @@ test('.creates asigns parent tree', function(assert) {
   assert.equal(Ceibo.parent(tree2).qux, 'another value');
 });
 
-test(".creates doesn't assigns a parent tree to the root", function(assert) {
+test(".create doesn't assigns a parent tree to the root", function(assert) {
   var tree = Ceibo.create({ foo: 'a value' });
 
   assert.ok(!Ceibo.parent(tree));

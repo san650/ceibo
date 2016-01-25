@@ -8,8 +8,12 @@
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
+  <script src="/testem.js" integrity="" ></script>
   <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
   <script src="../index.js"></script>
   <script src="tests.js"></script>
+  <script>
+    Testem.hookIntoTestFramework();
+  </script>
 </body>
 </html>
