@@ -1,0 +1,15 @@
+{
+  "framework": "qunit",
+  "disable_watching": true,
+  "test_page": "test/index.html",
+  "src_files": [
+    "*.js",
+    "test/*.js"
+  ],
+  "launch_in_ci": [
+    "PhantomJS"
+  ],
+  "launch_in_dev": [
+    "PhantomJS"
+  ]
+}
