@@ -128,12 +128,16 @@
   };
 
   var Ceibo = {
+    defaults: {
+      builder: DEFAULT_BUILDERS
+    },
+
     defineProperty: defineProperty,
 
     create: function(definition, options) {
       options = options || {};
 
-      var builder = merge(merge({}, DEFAULT_BUILDERS), options.builder);
+      var builder = merge(merge({}, this.defaults.builder), options.builder);
 
       return new TreeBuilder(definition, builder).build(options.parent);
     },
