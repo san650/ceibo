@@ -1,4 +1,5 @@
 # Ceibo
+[![Build Status](https://travis-ci.org/san650/ceibo.svg?branch=master)](https://travis-ci.org/san650/ceibo)
 
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
