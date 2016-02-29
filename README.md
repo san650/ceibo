@@ -1,5 +1,4 @@
 # Ceibo
-[![Build Status](https://travis-ci.org/san650/ceibo.svg?branch=master)](https://travis-ci.org/san650/ceibo)
 
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
@@ -168,6 +167,11 @@ var childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
 
 console.log(Ceibo.parent(childTree).foo); // "value"
 ```
+
+## Project's health
+
+[![Build Status](https://travis-ci.org/san650/ceibo.svg?branch=master)](https://travis-ci.org/san650/tajpado)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/2b555391e4ec43e997c1ae60e7f39907)](https://www.codacy.com/app/san650/ceibo)
 
 ## License
 
