@@ -121,7 +121,7 @@
     }
   };
 
-  const DEFAULT_BUILDERS = {
+  var DEFAULT_BUILDERS = {
     descriptor: buildDescriptor,
     object: buildObject,
     default: buildDefault
