@@ -217,3 +217,53 @@ test(".parent doesn't generates enumerable attribute", function(assert) {
 
   assert.equal(Object.keys(tree.foo).length, 1);
 });
+
+test("descriptor's .get function receives the key as argument", function(assert) {
+  var descriptor = {
+    isDescriptor: true,
+
+    get: function(key) {
+      return key;
+    }
+  };
+
+  var root = Ceibo.create({
+    foo: descriptor,
+    bar: descriptor
+  });
+
+  assert.equal(root.foo, 'foo');
+  assert.equal(root.bar, 'bar');
+});
+
+test('descriptor can access all the keys from root-to-leaf path', function(assert) {
+  var descriptor = {
+    isDescriptor: true,
+
+    get: function(key) {
+      var keys = [key];
+      var node = this;
+      var meta;
+
+      do {
+        meta = Ceibo.meta(node);
+
+        keys.unshift(meta.key);
+      } while(node = Ceibo.parent(node));
+
+      return keys;
+    }
+  };
+
+  var tree = Ceibo.create({
+    foo: {
+      bar: {
+        baz: {
+          qux: descriptor
+        }
+      }
+    }
+  });
+
+  assert.deepEqual(tree.foo.bar.baz.qux, ['root', 'foo', 'bar', 'baz', 'qux']);
+});

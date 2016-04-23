@@ -46,7 +46,13 @@
       attr.setup(target, key);
     }
 
-    defineProperty(target, key, attr.value, attr.get);
+    if (attr.value) {
+      defineProperty(target, key, attr.value);
+    } else {
+      defineProperty(target, key, undefined, function() {
+        return attr.get.call(this, key);
+      });
+    }
   }
 
   function buildObject(treeBuilder, target, key, attr) {
@@ -54,6 +60,9 @@
 
     // Create child component
     defineProperty(target, key, object);
+
+    // Set meta to object
+    setMeta(object, key);
 
     // Recursion
     treeBuilder.processNode(attr, object, target);
@@ -77,9 +86,26 @@
 
   function parent(object) {
     // Be carefull: typeof(null) === 'object'
-
     if (typeof object === 'object' && object !== null) {
       return object['__parentTreeNode'];
+    }
+  }
+
+  function setMeta(target, key) {
+    Object.defineProperty(target, '__meta', {
+      value: {
+        key: key,
+        type: 'node'
+      },
+      configurable: false,
+      enumerable: false
+    });
+  }
+
+  function meta(object) {
+    // Be carefull: typeof(null) === 'object'
+    if (typeof object === 'object' && object !== null) {
+      return object['__meta'];
     }
   }
 
@@ -142,6 +168,10 @@
 
     parent: function(node) {
       return parent(node);
+    },
+
+    meta: function(node) {
+      return meta(node);
     }
   };
 
