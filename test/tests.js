@@ -59,8 +59,8 @@ test('overrides how strings are built', function(assert) {
     { key: "value" },
     {
       builder: {
-        string: function(treeBuilder, target, key, value) {
-          target[key] = 'cuack ' + value;
+        string: function(node, blueprintKey, value, defaultBuilder) {
+          return defaultBuilder(node, blueprintKey, 'cuack ' + value, defaultBuilder);
         }
       }
     }
@@ -122,16 +122,16 @@ test('allows dynamic segments to process descriptors', function(assert) {
 });
 
 test('allows to insert custom keys to objects', function(assert) {
-  function buildObject(treeBuilder, target, key, value) {
-    var childNode = {
+  function buildObject(node, blueprintKey, blueprint) {
+    var value = {
       foo: 'generated property'
     };
 
     // Create child component
-    Ceibo.defineProperty(target, key, childNode);
+    Ceibo.defineProperty(node, blueprintKey, value);
 
-    // Recursion
-    treeBuilder.processNode(value, childNode, target);
+    // Do the recursion automatically
+    return [value, blueprint];
   }
 
   var tree = Ceibo.create(

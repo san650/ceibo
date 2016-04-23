@@ -1,8 +1,20 @@
 !function() {
-  function merge(target, source) {
-    for (var attr in source) {
-      if (typeof source[attr] !== 'undefined') {
-        target[attr] = source[attr];
+  function merge() {
+    var target = arguments[0];
+    var sources = Array.prototype.slice.call(arguments, 1);
+    var source;
+
+    for(var i = 0; i < sources.length; i++) {
+      source = sources[i];
+
+      if (!source) {
+        continue;
+      }
+
+      for(var attr in source) {
+        if (typeof source[attr] !== 'undefined') {
+          target[attr] = source[attr];
+        }
       }
     }
 
@@ -41,35 +53,64 @@
     Object.defineProperty(target, keyName, options);
   }
 
-  function buildDescriptor(treeBuilder, target, key, attr) {
-    if (typeof attr.setup === 'function') {
-      attr.setup(target, key);
+  /**
+   * Default `Descriptor` builder
+   *
+   * @param {TreeNode} node - parent node
+   * @param {String} blueprintKey - key to build
+   * @param {Descriptor} descriptor - descriptor to build
+   * @param {Function} defaultBuilder - default function to build this type of node
+   *
+   * @return undefined
+   */
+  function buildDescriptor(node, blueprintKey, descriptor /*, descriptorBuilder*/) {
+    if (typeof descriptor.setup === 'function') {
+      descriptor.setup(node, blueprintKey);
     }
 
-    if (attr.value) {
-      defineProperty(target, key, attr.value);
+    if (descriptor.value) {
+      defineProperty(node, blueprintKey, descriptor.value);
     } else {
-      defineProperty(target, key, undefined, function() {
-        return attr.get.call(this, key);
+      defineProperty(node, blueprintKey, undefined, function() {
+        return descriptor.get.call(this, blueprintKey);
       });
     }
   }
 
-  function buildObject(treeBuilder, target, key, attr) {
-    var object = {};
+  /**
+   * Default `Object` builder
+   *
+   * @param {TreeNode} node - parent node
+   * @param {String} blueprintKey - key to build
+   * @param {Object} blueprint - blueprint to build
+   * @param {Function} defaultBuilder - default function to build this type of node
+   *
+   * @return {Array} [node, blueprint] to build
+   */
+  function buildObject(node, blueprintKey, blueprint /*, defaultBuilder*/) {
+    var value = {};
 
     // Create child component
-    defineProperty(target, key, object);
+    defineProperty(node, blueprintKey, value);
 
     // Set meta to object
-    setMeta(object, key);
+    setMeta(value, blueprintKey);
 
-    // Recursion
-    treeBuilder.processNode(attr, object, target);
+    return [value, blueprint];
   }
 
-  function buildDefault(treeBuilder, target, key, attr) {
-    defineProperty(target, key, attr);
+  /**
+   * Default builder
+   *
+   * @param {TreeNode} node - parent node
+   * @param {String} blueprintKey - key to build
+   * @param {Any} value - value to build
+   * @param {Function} defaultBuilder - default function to build this type of node
+   *
+   * @return undefined
+   */
+  function buildDefault(node, blueprintKey, value /*, defaultBuilder*/) {
+    defineProperty(node, blueprintKey, value);
   }
 
   function setParent(target, parentTree) {
@@ -109,8 +150,8 @@
     }
   }
 
-  function TreeBuilder(definition, builders) {
-    this.definition = definition;
+  function TreeBuilder(blueprint, builders) {
+    this.blueprint = blueprint;
     this.builders = builders;
   }
 
@@ -123,7 +164,7 @@
       var root = {},
         node;
 
-      this.processNode({ root: this.definition }, root);
+      this.processNode({ root: this.blueprint }, root);
 
       node = root['root'];
       setParent(node, parentTree);
@@ -131,16 +172,22 @@
       return node;
     },
 
-    processNode: function(definition, target, parent) {
-      var keys = Object.keys(definition),
+    processNode: function(blueprintNode, target, parent) {
+      var keys = Object.keys(blueprintNode),
           that = this;
 
       keys.forEach(function(key) {
-        var attr = definition[key],
-          builder;
+        var blueprintAttribute = blueprintNode[key],
+            builder,
+            defaultBuilder,
+            result;
 
-        builder = that.builderFor(attr);
-        builder(that, target, key, attr);
+        builder = that.builderFor(blueprintAttribute);
+        defaultBuilder = builderFor(blueprintAttribute);
+
+        if (result = builder(target, key, blueprintAttribute, defaultBuilder)) {
+          that.processNode(result[1], result[0], target);
+        }
       });
 
       setParent(target, parent);
@@ -148,6 +195,10 @@
       return target;
     }
   };
+
+  function builderFor(value) {
+    return DEFAULT_BUILDERS[typeOf(value)] || DEFAULT_BUILDERS['default'];
+  }
 
   var DEFAULT_BUILDERS = {
     descriptor: buildDescriptor,
@@ -158,12 +209,12 @@
   var Ceibo = {
     defineProperty: defineProperty,
 
-    create: function(definition, options) {
+    create: function(blueprint, options) {
       options = options || {};
 
-      var builder = merge(merge({}, DEFAULT_BUILDERS), options.builder);
+      var builder = merge({}, DEFAULT_BUILDERS, options.builder);
 
-      return new TreeBuilder(definition, builder).build(options.parent);
+      return new TreeBuilder(blueprint, builder).build(options.parent);
     },
 
     parent: function(node) {
