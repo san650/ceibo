@@ -168,6 +168,61 @@ var childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
 console.log(Ceibo.parent(childTree).foo); // "value"
 ```
 
+Descriptor's `get` function receive the `key` when evaluated
+
+```js
+var descriptor = {
+  isDescriptor: true,
+
+  get: function(key) {
+    return key;
+  }
+};
+
+var root = Ceibo.create({
+  foo: descriptor,
+  bar: descriptor
+});
+
+console.log(root.foo); // "foo"
+console.log(root.bar); // "bar"
+```
+
+Ceibo's nodes store some meta data, you can access said meta data using
+`Ceib.meta` function.
+
+```js
+var descriptor = {
+  isDescriptor: true,
+
+  get: function(key) {
+    var keys = [key];
+    var node = this;
+    var meta;
+
+    do {
+      meta = Ceibo.meta(node);
+
+      keys.unshift(meta.key);
+    } while(node = Ceibo.parent(node));
+
+    return keys;
+  }
+};
+
+var tree = Ceibo.create({
+  foo: {
+    bar: {
+      baz: {
+        qux: descriptor
+      }
+    }
+  }
+});
+
+console.log(tree.foo.bar.baz.qux); // ['root', 'foo', 'bar', 'baz', 'qux']
+```
+
 ## Project's health
 
 [![Build Status](https://travis-ci.org/san650/ceibo.svg?branch=master)](https://travis-ci.org/san650/tajpado)
