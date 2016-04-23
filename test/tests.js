@@ -217,17 +217,3 @@ test(".parent doesn't generates enumerable attribute", function(assert) {
 
   assert.equal(Object.keys(tree.foo).length, 1);
 });
-
-test("default builders are exposed", function(assert) {
-  assert.expect(4);
-
-  var expectedKeys = ["descriptor", "object", "default"];
-
-  var defaults = Ceibo.defaults;
-
-  assert.equal(typeof defaults.builder, "object");
-
-  for (var i = 0; i < expectedKeys.length; i++) {
-    assert.equal(typeof defaults.builder[expectedKeys[i]], "function");
-  }
-});
