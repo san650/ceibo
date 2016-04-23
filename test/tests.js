@@ -76,9 +76,9 @@ test('support value in descriptors', function(assert) {
       value: function(index) {
         var copy = {};
 
-        for (var attr in definition) {
+        Object.keys(definition).forEach(function(attr) {
           copy[attr] = index + ' ' + definition[attr];
-        }
+        });
 
         return copy;
       }
