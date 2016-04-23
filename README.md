@@ -1,5 +1,7 @@
 # Ceibo
 
+![Latest version](https://img.shields.io/npm/v/ceibo.svg)
+
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
 
