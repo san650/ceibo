@@ -96,8 +96,9 @@ You can redefine how each value type is processed when the Ceibo tree is
 created:
 
 ```js
-function buildString(treeBuilder, target, keyName, value) {
-  Ceibo.defineProperty(target, keyName, `Cuack ${value}`);
+
+function buildString(node, blueprintKey, value, defaultBuilder) {
+  return defaultBuilder(node, blueprintKey, `Cuack ${value}`);
 }
 
 var root = Ceibo.create(
@@ -117,16 +118,17 @@ console.log(root.foo); // "Cuack first value"
 Redefine how plain objects are processed to generate custom attributes:
 
 ```js
-function buildObject(treeBuilder, target, keyName, value) {
-  var childNode = {
+
+function buildObject(node, blueprintKey, blueprint /*, defaultBuilder */) {
+  var value = {
     generatedProperty: 'generated property'
   };
 
-  // define current keyName and assign the new object
-  Ceibo.defineProperty(target, keyName, childNode);
+  // define current key and assign the new object
+  Ceibo.defineProperty(node, blueprintKey, value);
 
   // continue to build the tree recursively
-  treeBuilder.processNode(value, childNode, target);
+  return [value, blueprint];
 }
 
 var root = Ceibo.create(
