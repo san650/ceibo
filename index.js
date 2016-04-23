@@ -1,7 +1,9 @@
 !function() {
   function merge(target, source) {
     for (var attr in source) {
-      target[attr] = source[attr];
+      if (typeof source[attr] !== 'undefined') {
+        target[attr] = source[attr];
+      }
     }
 
     return target;
@@ -105,7 +107,7 @@
 
     processNode: function(definition, target, parent) {
       var keys = Object.keys(definition),
-          that = this;;
+          that = this;
 
       keys.forEach(function(key) {
         var attr = definition[key],
