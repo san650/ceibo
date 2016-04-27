@@ -229,7 +229,7 @@ console.log(tree.foo.bar.baz.qux); // ['root', 'foo', 'bar', 'baz', 'qux']
 
 ## Project's health
 
-[![Build Status](https://travis-ci.org/san650/ceibo.svg?branch=master)](https://travis-ci.org/san650/tajpado)
+[![Build Status](https://travis-ci.org/san650/ceibo.svg?branch=master)](https://travis-ci.org/san650/ceibo)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/2b555391e4ec43e997c1ae60e7f39907)](https://www.codacy.com/app/san650/ceibo)
 
 ## License
