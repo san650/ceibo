@@ -193,7 +193,7 @@ console.log(root.bar); // "bar"
 ```
 
 Ceibo's nodes store some meta data, you can access said meta data using
-`Ceib.meta` function.
+`Ceibo.meta` function.
 
 ```js
 var descriptor = {
