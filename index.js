@@ -132,6 +132,18 @@
     }
   }
 
+  function findClosestValue(node, property) {
+    if (node[property] !== undefined && node[property] !== null) {
+      return node[property];
+    }
+
+    var parent = Ceibo.parent(node);
+
+    if (typeof parent === 'object' && parent !== null) {
+      return findClosestValue(parent, property);
+    }
+  }
+
   function setMeta(target, key) {
     Object.defineProperty(target, '__meta', {
       value: {
@@ -223,6 +235,10 @@
 
     meta: function(node) {
       return meta(node);
+    },
+
+    findClosestValue: function(node, property) {
+      return findClosestValue(node, property);
     }
   };
 
