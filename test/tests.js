@@ -218,6 +218,27 @@ test(".parent doesn't generates enumerable attribute", function(assert) {
   assert.equal(Object.keys(tree.foo).length, 1);
 });
 
+test(".findClosestValue returns value for property if defined in node", function(assert) {
+  var tree = Ceibo.create({ foo: 'a value' } );
+
+  assert.equal(Ceibo.findClosestValue(tree, 'foo'), 'a value');
+});
+
+test(".findClosestValue returns value for property in parent if not defined on node", function(assert) {
+  var parentTree = Ceibo.create({ bar: 'another value' });
+  var tree = Ceibo.create({ foo: 'a value' }, { parent: parentTree });
+
+  assert.equal(Ceibo.findClosestValue(tree, 'bar'), 'another value');
+});
+
+test(".findClosestValue returns value for property from closest ancestor", function(assert) {
+  var grandParentTree = Ceibo.create({ bar: 'grandparent value' });
+  var parentTree = Ceibo.create({ bar: 'parent value' }, { parent: grandParentTree });
+  var tree = Ceibo.create({ foo: 'child value' }, { parent: parentTree });
+
+  assert.equal(Ceibo.findClosestValue(tree, 'bar'), 'parent value');
+});
+
 test("descriptor's .get function receives the key as argument", function(assert) {
   var descriptor = {
     isDescriptor: true,
