@@ -218,6 +218,27 @@ test(".parent doesn't generates enumerable attribute", function(assert) {
   assert.equal(Object.keys(tree.foo).length, 1);
 });
 
+test(".getAllValuesForProperty includes value for start node", function(assert) {
+  var tree = Ceibo.create({ foo: 'a value' } );
+
+  assert.deepEqual(Ceibo.getAllValuesForProperty(tree, 'foo'), ['a value']);
+});
+
+test(".getAllValuesForProperty includes value from parent", function(assert) {
+  var parentTree = Ceibo.create({ foo: 'another value' });
+  var tree = Ceibo.create({ foo: 'a value' }, { parent: parentTree });
+
+  assert.deepEqual(Ceibo.getAllValuesForProperty(tree, 'foo'), ['a value', 'another value']);
+});
+
+test(".getAllValuesForProperty only includes the value when defined", function(assert) {
+  var grandParentTree = Ceibo.create({ foo: 'grandparent value' });
+  var parentTree = Ceibo.create({ bar: 'parent value' }, { parent: grandParentTree });
+  var tree = Ceibo.create({ foo: 'child value' }, { parent: parentTree });
+
+  assert.deepEqual(Ceibo.getAllValuesForProperty(tree, 'foo'), ['child value', 'grandparent value']);
+});
+
 test("descriptor's .get function receives the key as argument", function(assert) {
   var descriptor = {
     isDescriptor: true,
