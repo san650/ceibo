@@ -132,6 +132,21 @@
     }
   }
 
+  function getAllValuesForProperty(node, property) {
+    var iterator = node;
+    var values = [];
+
+    while (iterator !== undefined && iterator !== null) {
+      if (iterator[property] !== undefined && iterator[property] !== null) {
+        values.push(iterator[property]);
+      }
+
+      iterator = Ceibo.parent(iterator);
+    }
+
+    return values;
+  }
+
   function setMeta(target, key) {
     Object.defineProperty(target, '__meta', {
       value: {
@@ -223,6 +238,10 @@
 
     meta: function(node) {
       return meta(node);
+    },
+
+    getAllValuesForProperty: function(node, property) {
+      return getAllValuesForProperty(node, property);
     }
   };
 
