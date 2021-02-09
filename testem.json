@@ -2,14 +2,29 @@
   "framework": "qunit",
   "disable_watching": true,
   "test_page": "test/index.html",
+  "launch_in_ci": [
+    "Chrome"
+  ],
+  "launch_in_dev": [
+    "Chrome"
+  ],
+  "browser_start_timeout": 120,
+  "browser_args": {
+    "Chrome": {
+      "ci": [
+        "--no-sandbox",
+        "--headless",
+        "--disable-dev-shm-usage",
+        "--disable-software-rasterizer",
+        "--mute-audio",
+        "--remote-debugging-port=0",
+        "--window-size=1440,900"
+      ]
+    }
+  },
+  "parallel": -1,
   "src_files": [
     "*.js",
     "test/*.js"
-  ],
-  "launch_in_ci": [
-    "PhantomJS"
-  ],
-  "launch_in_dev": [
-    "PhantomJS"
   ]
 }

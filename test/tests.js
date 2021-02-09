@@ -1,3 +1,6 @@
+const { module, test } = window.QUnit;
+const { Ceibo } = window;
+
 module('Unit');
 
 test('returns a copy of the keys', function(assert) {
