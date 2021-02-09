@@ -15,5 +15,22 @@ branches:
   only:
     - master
 
+jobs:
+  fast_finish: true
+
+  include:
+    # runs linting and tests with current locked deps
+
+    - stage: "Browser Tests"
+      name: "Browser Tests"
+      script:
+        - npm test:browser
+
+    - stage: "Node Tests"
+      name: "Node Tests"
+      script:
+        - npm test:node
+
 install:
   - npm install
+
