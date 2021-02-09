@@ -232,6 +232,8 @@
       __exports__.Ceibo = Ceibo;
       __exports__.default = Ceibo;
     });
+  } else if (typeof module === "object" && typeof module.exports === "object") {
+    module.exports = Ceibo;
   } else {
     window.Ceibo = Ceibo;
   }
