@@ -19,6 +19,6 @@ install:
   - npm install
 
 script:
-  - npm test:node
-  - npm test:browser
+  - npm run test:node
+  - npm run test:browser
 
