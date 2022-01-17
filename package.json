@@ -5,8 +5,15 @@
   "homepage": "https://github.com/san650/ceibo#readme",
   "bugs": "https://github.com/san650/ceibo/issues",
   "main": "index.js",
-  "type": "commonjs",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
   "scripts": {
+    "build-dev": "webpack --mode=development",
+    "build": "webpack",
+    "prepublish": "npm run build",
+    "pretest": "npm run build-dev",
     "test:browser": "testem ci",
     "test:node": "node_modules/.bin/qunit ./test/commonjs-test.js",
     "test": "npm run test:node && npm run test:browser"
@@ -23,6 +30,8 @@
   "license": "MIT",
   "devDependencies": {
     "qunit": "^2.14.0",
-    "testem": "^3.2.0"
+    "testem": "^3.2.0",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.6.0"
   }
 }

@@ -4,3 +4,5 @@ package-lock.json
 yarn.lock
 .nvmrc
 testem.log
+# UMD built by webpack 
+/index.js
