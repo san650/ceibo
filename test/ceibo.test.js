@@ -1,14 +1,13 @@
-const { module, test } = window.QUnit;
-const { Ceibo } = window;
+import Ceibo from '../index';
 
-module('Browser', function() {
-  test('returns a copy of the keys', function(assert) {
+describe('Browser', () => {
+  test('returns a copy of the keys', () => {
     var tree = Ceibo.create({ key: 'value' });
 
-    assert.equal(tree.key, 'value');
+    expect(tree.key).toEqual('value');
   });
 
-  test('evaluates a descriptor', function(assert) {
+  test('evaluates a descriptor', () => {
     var tree = Ceibo.create({
       key: {
         isDescriptor: true,
@@ -18,20 +17,20 @@ module('Browser', function() {
       }
     });
 
-    assert.equal(tree.key, 'value');
+    expect(tree.key).toEqual('value');
   });
 
-  test('process definition recursively', function(assert) {
+  test('process definition recursively', () => {
     var tree = Ceibo.create({
       key: {
         anotherKey: 'value'
       }
     });
 
-    assert.equal(tree.key.anotherKey, 'value');
+    expect(tree.key.anotherKey).toEqual('value');
   });
 
-  test('process descriptors recursively', function(assert) {
+  test('process descriptors recursively', () => {
     var tree = Ceibo.create({
       key: {
         anotherKey: {
@@ -43,20 +42,20 @@ module('Browser', function() {
       }
     });
 
-    assert.equal(tree.key.anotherKey, 'value');
+    expect(tree.key.anotherKey).toEqual('value');
   });
 
-  test('parent node is accessible', function(assert) {
+  test('parent node is accessible', () => {
     var tree = Ceibo.create({
       key: {
         anotherKey: 'value'
       }
     });
 
-    assert.equal(Ceibo.parent(tree.key).key.anotherKey, 'value');
+    expect(Ceibo.parent(tree.key).key.anotherKey).toEqual('value');
   });
 
-  test('overrides how strings are built', function(assert) {
+  test('overrides how strings are built', () => {
     var tree = Ceibo.create(
       { key: "value" },
       {
@@ -68,10 +67,10 @@ module('Browser', function() {
       }
     );
 
-    assert.equal(tree.key, 'cuack value');
+    expect(tree.key).toEqual('cuack value');
   });
 
-  test('support value in descriptors', function(assert) {
+  test('support value in descriptors', () => {
     function dynamic(definition) {
       return {
         isDescriptor: true,
@@ -93,11 +92,11 @@ module('Browser', function() {
       })
     });
 
-    assert.equal(tree.key(1).anotherKey, '1 value');
-    assert.equal(tree.key(2).anotherKey, '2 value');
+    expect(tree.key(1).anotherKey).toEqual('1 value');
+    expect(tree.key(2).anotherKey).toEqual('2 value');
   });
 
-  test('allows dynamic segments to process descriptors', function(assert) {
+  test('allows dynamic segments to process descriptors', () => {
     function dynamic(definition) {
       return {
         isDescriptor: true,
@@ -120,10 +119,10 @@ module('Browser', function() {
       })
     });
 
-    assert.equal(tree.key(1).anotherKey, 'value');
+    expect(tree.key(1).anotherKey).toEqual('value');
   });
 
-  test('allows to insert custom keys to objects', function(assert) {
+  test('allows to insert custom keys to objects', () => {
     function buildObject(node, blueprintKey, blueprint) {
       var value = {
         foo: 'generated property'
@@ -147,12 +146,12 @@ module('Browser', function() {
       }
     );
 
-    assert.equal(tree.foo, 'generated property');
-    assert.equal(tree.key.anotherKey, 'value');
-    assert.equal(tree.key.foo, 'generated property');
+    expect(tree.foo).toEqual('generated property');
+    expect(tree.key.anotherKey).toEqual('value');
+    expect(tree.key.foo).toEqual('generated property');
   });
 
-  test('descriptors can access current tree by default', function(assert) {
+  test('descriptors can access current tree by default', () => {
     var tree = Ceibo.create({
       foo: {
         isDescriptor: true,
@@ -169,13 +168,12 @@ module('Browser', function() {
       }
     });
 
-    assert.equal(
-      tree.foo,
+    expect(tree.foo).toEqual(
       'The answer to life, the universe and everything is 42'
     );
   });
 
-  test('descriptors can mutate tree on build', function(assert) {
+  test('descriptors can mutate tree on build', () => {
     var tree = Ceibo.create({
       foo: {
         isDescriptor: true,
@@ -190,37 +188,37 @@ module('Browser', function() {
       }
     });
 
-    assert.equal(tree.FOO, 'generated property');
+    expect(tree.FOO).toEqual('generated property');
   });
 
-  test('.create asigns parent tree', function(assert) {
+  test('.create asigns parent tree', () => {
     var parentTree = Ceibo.create({ foo: { qux: 'another value' }, bar: 'a value' });
     var tree1 = Ceibo.create({ baz: {} }, { parent: parentTree });
     var tree2 = Ceibo.create({ baz: {} }, { parent: parentTree.foo });
 
-    assert.equal(Ceibo.parent(Ceibo.parent(tree1.baz)).bar, 'a value');
-    assert.equal(Ceibo.parent(tree2).qux, 'another value');
+    expect(Ceibo.parent(Ceibo.parent(tree1.baz)).bar).toEqual('a value');
+    expect(Ceibo.parent(tree2).qux).toEqual('another value');
   });
 
-  test(".create doesn't assigns a parent tree to the root", function(assert) {
+  test(".create doesn't assigns a parent tree to the root", () => {
     var tree = Ceibo.create({ foo: 'a value' });
 
-    assert.ok(!Ceibo.parent(tree));
+    expect(Ceibo.parent(tree)).toBeFalsy();
   });
 
-  test(".parent returns undefined when node doesn't have parent or doesn't exists", function(assert) {
+  test(".parent returns undefined when node doesn't have parent or doesn't exists", () => {
     var node = undefined;
 
-    assert.ok(!Ceibo.parent(node));
+    expect(Ceibo.parent(node)).toBeFalsy();
   });
 
-  test(".parent doesn't generates enumerable attribute", function(assert) {
+  test(".parent doesn't generates enumerable attribute", () => {
     var tree = Ceibo.create({ foo: { bar: "a value" } });
 
-    assert.equal(Object.keys(tree.foo).length, 1);
+    expect(Object.keys(tree.foo).length).toEqual(1);
   });
 
-  test("descriptor's .get function receives the key as argument", function(assert) {
+  test("descriptor's .get function receives the key as argument", () => {
     var descriptor = {
       isDescriptor: true,
 
@@ -234,11 +232,11 @@ module('Browser', function() {
       bar: descriptor
     });
 
-    assert.equal(root.foo, 'foo');
-    assert.equal(root.bar, 'bar');
+    expect(root.foo).toEqual('foo');
+    expect(root.bar).toEqual('bar');
   });
 
-  test('descriptor can access all the keys from root-to-leaf path', function(assert) {
+  test('descriptor can access all the keys from root-to-leaf path', () => {
     var descriptor = {
       isDescriptor: true,
 
@@ -267,6 +265,6 @@ module('Browser', function() {
       }
     });
 
-    assert.deepEqual(tree.foo.bar.baz.qux, ['root', 'foo', 'bar', 'baz', 'qux']);
+    expect(tree.foo.bar.baz.qux).toEqual(['root', 'foo', 'bar', 'baz', 'qux']);
   });
 });
