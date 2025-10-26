@@ -1,6 +1,6 @@
 import Ceibo from '../index';
 
-describe('Browser', () => {
+describe('Ceibo', () => {
   test('returns a copy of the keys', () => {
     var tree = Ceibo.create({ key: 'value' });
 
@@ -61,7 +61,7 @@ describe('Browser', () => {
       {
         builder: {
           string: function(node, blueprintKey, value, defaultBuilder) {
-            return defaultBuilder(node, blueprintKey, 'cuack ' + value, defaultBuilder);
+            return defaultBuilder(node, blueprintKey, 'cuack ' + value);
           }
         }
       }
@@ -191,7 +191,7 @@ describe('Browser', () => {
     expect(tree.FOO).toEqual('generated property');
   });
 
-  test('.create asigns parent tree', () => {
+  test('.create - assigns parent tree', () => {
     var parentTree = Ceibo.create({ foo: { qux: 'another value' }, bar: 'a value' });
     var tree1 = Ceibo.create({ baz: {} }, { parent: parentTree });
     var tree2 = Ceibo.create({ baz: {} }, { parent: parentTree.foo });
@@ -200,19 +200,19 @@ describe('Browser', () => {
     expect(Ceibo.parent(tree2).qux).toEqual('another value');
   });
 
-  test(".create doesn't assigns a parent tree to the root", () => {
+  test(".create - doesn't assign a parent tree to the root", () => {
     var tree = Ceibo.create({ foo: 'a value' });
 
     expect(Ceibo.parent(tree)).toBeFalsy();
   });
 
-  test(".parent returns undefined when node doesn't have parent or doesn't exists", () => {
+  test(".parent - returns undefined when node doesn't have parent or doesn't exists", () => {
     var node = undefined;
 
     expect(Ceibo.parent(node)).toBeFalsy();
   });
 
-  test(".parent doesn't generates enumerable attribute", () => {
+  test(".parent - doesn't generate enumerable attribute", () => {
     var tree = Ceibo.create({ foo: { bar: "a value" } });
 
     expect(Object.keys(tree.foo).length).toEqual(1);
