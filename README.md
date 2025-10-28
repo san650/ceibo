@@ -1,6 +1,7 @@
 # Ceibo
 
 ![Latest version](https://img.shields.io/npm/v/ceibo.svg)
+[![CI](https://github.com/san650/ceibo/actions/workflows/ci.yml/badge.svg)](https://github.com/san650/ceibo/actions/workflows/ci.yml)
 
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
