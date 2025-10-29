@@ -1,3 +1,7 @@
+---
+title: Ceibo 🌱
+description: JavaScript micro library to model trees that evaluate arbitrary code when accessing its nodes.
+---
 ![Latest version](https://img.shields.io/npm/v/ceibo.svg)  [![CI](https://github.com/san650/ceibo/actions/workflows/ci.yml/badge.svg)](https://github.com/san650/ceibo/actions/workflows/ci.yml)
 
 ## What is Ceibo 🌱 ?
@@ -172,7 +176,7 @@ const childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree })
 console.log(Ceibo.parent(childTree).foo); // "value"
 ```
 
-Descriptor's `get` function receive the `key` when evaluated
+Descriptor's `get` function receives the `key` when evaluated
 
 ```js
 const descriptor = {
@@ -192,7 +196,7 @@ console.log(root.foo); // "foo"
 console.log(root.bar); // "bar"
 ```
 
-Ceibo's nodes store some meta data, you can access said meta data using
+Ceibo's nodes store some metadata, you can access said metadata using
 `Ceibo.meta` function.
 
 ```js
