@@ -1,7 +1,6 @@
-# Ceibo
+# Ceibo 🌱
 
-![Latest version](https://img.shields.io/npm/v/ceibo.svg)
-[![CI](https://github.com/san650/ceibo/actions/workflows/ci.yml/badge.svg)](https://github.com/san650/ceibo/actions/workflows/ci.yml)
+![Latest version](https://img.shields.io/npm/v/ceibo.svg)  [![CI](https://github.com/san650/ceibo/actions/workflows/ci.yml/badge.svg)](https://github.com/san650/ceibo/actions/workflows/ci.yml)
 
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
@@ -15,7 +14,7 @@ a subtree is generated on the fly when a node is accessed.
 Let's start by doing the most simple case, the identity case:
 
 ```js
-var root = Ceibo.create({
+const root = Ceibo.create({
   foo: {
     bar: 'baz'
   }
@@ -24,11 +23,10 @@ var root = Ceibo.create({
 console.log(root.foo.bar); // "baz"
 ```
 
-You can create special node types called _descriptors_ that allow you to respond
-to node access:
+You can create special node types called _descriptors_ that allow you to respond to node access:
 
 ```js
-var root = Ceibo.create({
+const root = Ceibo.create({
   foo: {
     isDescriptor: true,
 
@@ -48,7 +46,7 @@ You can define a `get` method or you can declare a `value` attribute, then the
 value attribute is going to be used as is:
 
 ```js
-var root = Ceibo.create({
+const root = Ceibo.create({
   foo: {
     isDescriptor: true,
 
@@ -61,11 +59,10 @@ var root = Ceibo.create({
 console.log(root.foo('42')); // "The answer to life, the universe and everything is 42"
 ```
 
-_descriptors_ can inspect and mutate the target object by defining a `setup`
-method:
+_descriptors_ can inspect and mutate the target object by defining a `setup` method:
 
 ```js
-var tree = Ceibo.create({
+const tree = Ceibo.create({
   foo: {
     isDescriptor: true,
 
@@ -86,7 +83,7 @@ console.log(tree.FOO); // "generated property"
 Note that Ceibo trees are read-only, so you cannot reassign attributes:
 
 ```js
-var root = Ceibo.create({
+const root = Ceibo.create({
   foo: 'bar'
 });
 
@@ -98,11 +95,11 @@ created:
 
 ```js
 
-function buildString(node, blueprintKey, value, defaultBuilder) {
+const buildString = (node, blueprintKey, value, defaultBuilder) => {
   return defaultBuilder(node, blueprintKey, `Cuack ${value}`);
 }
 
-var root = Ceibo.create(
+const root = Ceibo.create(
   {
     foo: 'first value'
   },
@@ -120,8 +117,8 @@ Redefine how plain objects are processed to generate custom attributes:
 
 ```js
 
-function buildObject(node, blueprintKey, blueprint /*, defaultBuilder */) {
-  var value = {
+const buildObject = (node, blueprintKey, blueprint /*, defaultBuilder */) => {
+  const value = {
     generatedProperty: 'generated property'
   };
 
@@ -132,7 +129,7 @@ function buildObject(node, blueprintKey, blueprint /*, defaultBuilder */) {
   return [value, blueprint];
 }
 
-var root = Ceibo.create(
+const root = Ceibo.create(
   {
     foo: {
       bar: 'baz'
@@ -153,7 +150,7 @@ console.log(root.foo.bar); // "baz"
 You can navigate to parent nodes
 
 ```js
-var tree = Ceibo.create({
+const tree = Ceibo.create({
   foo: {
     bar: {
       baz: 'a value'
@@ -167,8 +164,8 @@ console.log(Ceibo.parent(tree.foo.bar).bar.baz); // "a value"
 You can assign custom parents to trees
 
 ```js
-var parentTree = Ceibo.create({ foo: 'value' });
-var childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
+const parentTree = Ceibo.create({ foo: 'value' });
+const childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
 
 console.log(Ceibo.parent(childTree).foo); // "value"
 ```
@@ -176,7 +173,7 @@ console.log(Ceibo.parent(childTree).foo); // "value"
 Descriptor's `get` function receive the `key` when evaluated
 
 ```js
-var descriptor = {
+const descriptor = {
   isDescriptor: true,
 
   get: function(key) {
@@ -184,7 +181,7 @@ var descriptor = {
   }
 };
 
-var root = Ceibo.create({
+const root = Ceibo.create({
   foo: descriptor,
   bar: descriptor
 });
@@ -197,13 +194,13 @@ Ceibo's nodes store some meta data, you can access said meta data using
 `Ceibo.meta` function.
 
 ```js
-var descriptor = {
+const descriptor = {
   isDescriptor: true,
 
   get: function(key) {
-    var keys = [key];
-    var node = this;
-    var meta;
+    const keys = [key];
+    let node = this;
+    let meta;
 
     do {
       meta = Ceibo.meta(node);
@@ -215,7 +212,7 @@ var descriptor = {
   }
 };
 
-var tree = Ceibo.create({
+const tree = Ceibo.create({
   foo: {
     bar: {
       baz: {
