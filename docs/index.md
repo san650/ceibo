@@ -1,6 +1,6 @@
 ---
 title: Ceibo 🌱
-layout: layout
+description: JavaScript micro library to model trees that evaluate arbitrary code when accessing its nodes.
 ---
 ![Latest version](https://img.shields.io/npm/v/ceibo.svg)  [![CI](https://github.com/san650/ceibo/actions/workflows/ci.yml/badge.svg)](https://github.com/san650/ceibo/actions/workflows/ci.yml)
 
@@ -169,13 +169,13 @@ console.log(Ceibo.parent(tree.foo.bar).bar.baz); // "a value"
 You can assign custom parents to trees
 
 ```js
-var parentTree = Ceibo.create({ foo: 'value' });
-var childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
+const parentTree = Ceibo.create({ foo: 'value' });
+const childTree = Ceibo.create({ bar: 'another value' }, { parent: parentTree });
 
 console.log(Ceibo.parent(childTree).foo); // "value"
 ```
 
-Descriptor's `get` function receive the `key` when evaluated
+Descriptor's `get` function receives the `key` when evaluated
 
 ```js
 const descriptor = {
@@ -195,7 +195,7 @@ console.log(root.foo); // "foo"
 console.log(root.bar); // "bar"
 ```
 
-Ceibo's nodes store some meta data, you can access said meta data using
+Ceibo's nodes store some metadata, you can access said metadata using
 `Ceibo.meta` function.
 
 ```js
@@ -203,9 +203,9 @@ const descriptor = {
   isDescriptor: true,
 
   get: function(key) {
-    var keys = [key];
-    var node = this;
-    var meta;
+    const keys = [key];
+    let node = this;
+    let meta;
 
     do {
       meta = Ceibo.meta(node);
@@ -217,7 +217,7 @@ const descriptor = {
   }
 };
 
-var tree = Ceibo.create({
+const tree = Ceibo.create({
   foo: {
     bar: {
       baz: {
