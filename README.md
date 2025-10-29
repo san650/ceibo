@@ -1,9 +1,11 @@
-# Ceibo 🌱
-
 ![Latest version](https://img.shields.io/npm/v/ceibo.svg)  [![CI](https://github.com/san650/ceibo/actions/workflows/ci.yml/badge.svg)](https://github.com/san650/ceibo/actions/workflows/ci.yml)
+
+## What is Ceibo 🌱 ?
 
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
+
+## How 💡 ?
 
 The tree is modeled as a plain JavaScript object where each node has an
 arbitrary getter function. This allows to have a representation of a tree where

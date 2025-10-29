@@ -9,7 +9,7 @@ description: JavaScript micro library to model trees that evaluate arbitrary cod
 JavaScript micro library to model trees that evaluate arbitrary code when
 accessing its nodes.
 
-## How 💡?
+## How 💡 ?
 
 The tree is modeled as a plain JavaScript object where each node has an
 arbitrary getter function. This allows to have a representation of a tree where
