@@ -17,7 +17,7 @@ Let's start by doing the most simple case, the identity case:
 ```js
 var root = Ceibo.create({
   foo: {
-    bar: 'baz';
+    bar: 'baz'
   }
 });
 
@@ -87,7 +87,7 @@ Note that Ceibo trees are read-only, so you cannot reassign attributes:
 
 ```js
 var root = Ceibo.create({
-  foo: 'bar';
+  foo: 'bar'
 });
 
 root.foo = 'baz'; // => throws an error!
@@ -145,9 +145,9 @@ var root = Ceibo.create(
   }
 );
 
-console.log(tree.generatedProperty); // "generated property"
-console.log(tree.foo.generatedProperty); // "generated property"
-console.log(tree.foo.bar); // "baz"
+console.log(root.generatedProperty); // "generated property"
+console.log(root.foo.generatedProperty); // "generated property"
+console.log(root.foo.bar); // "baz"
 ```
 
 You can navigate to parent nodes
